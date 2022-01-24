@@ -1,8 +1,14 @@
-import { Avatar, Group, Text, UnstyledButton } from '@mantine/core';
+import { useAuth0 } from '@auth0/auth0-react';
+import { Avatar, Button, Group, Text, UnstyledButton } from '@mantine/core';
 import { createStyles, useMantineTheme } from '@mantine/styles';
 import { ChevronRightIcon } from '@modulz/radix-icons';
+import { LockOpen2Icon } from '@modulz/radix-icons';
 
 const useStyles = createStyles((theme) => ({
+  loginButton: {
+    height: '3rem',
+    width: '100%',
+  },
   user: {
     '&:hover': {
       backgroundColor:
@@ -19,8 +25,28 @@ const useStyles = createStyles((theme) => ({
 }));
 
 export default function User() {
+  const { user, isAuthenticated, isLoading, loginWithRedirect } = useAuth0();
+
   const theme = useMantineTheme();
   const { classes } = useStyles();
+
+  if (!user) {
+    return (
+      <Button
+        className={classes.loginButton}
+        leftIcon={<LockOpen2Icon />}
+        loaderPosition="right"
+        loading={isLoading}
+        onClick={() => loginWithRedirect()}
+      >
+        {isLoading ? 'Connecting' : 'Acceder'}
+      </Button>
+    );
+  }
+
+  console.log({ user });
+  console.log({ isAuthenticated });
+  console.log({ isLoading });
 
   return (
     <div
@@ -34,19 +60,16 @@ export default function User() {
       }}
     >
       <UnstyledButton className={classes.user}>
-        <Group>
-          <Avatar
-            radius="xl"
-            src="https://images.unsplash.com/photo-1508214751196-bcfd4ca60f91?ixid=MXwxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHw%3D&ixlib=rb-1.2.1&auto=format&fit=crop&w=255&q=80"
-          />
-          <div style={{ flex: 1 }}>
+        <Group spacing={5}>
+          <Avatar radius="xl" src={user.picture} />
+          <Group direction="column" position="left" spacing={1}>
             <Text size="sm" weight={500}>
-              Amy Horsefighter
+              {user.name}
             </Text>
             <Text color="dimmed" size="xs">
-              ahorsefighter@gmail.com
+              {user.email}
             </Text>
-          </div>
+          </Group>
 
           <ChevronRightIcon height={18} width={18} />
         </Group>

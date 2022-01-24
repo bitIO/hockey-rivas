@@ -16,7 +16,7 @@ const NavigationBar = () => {
       className={classes.navbarResponsive}
       hidden={!isNavbarOpened}
       hiddenBreakpoint="sm"
-      padding="xl"
+      padding="xs"
     >
       <Navbar.Section grow mt="lg">
         <MainLinks />
