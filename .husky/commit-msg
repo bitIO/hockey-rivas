@@ -1,0 +1,9 @@
+#!/bin/sh
+. "$(dirname "$0")/_/husky.sh"
+
+echo "--- LINT COMMIT MESSAGE ---"
+yarn commitlint --edit $1
+
+echo "--- CSPELL COMMIT MESSAGE ---"
+commit_msg_file=$1
+exec npx cspell -- --no-summary $commit_msg_file

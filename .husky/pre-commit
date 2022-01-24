@@ -1,4 +1,8 @@
 #!/bin/sh
 . "$(dirname "$0")/_/husky.sh"
 
+echo "--- LINT STAGED ---"
 npx lint-staged
+
+echo "--- CSPELL STAGED ---"
+exec git diff --cached --name-only | npx cspell --no-summary --no-progress --no-must-find-files --file-list stdin
